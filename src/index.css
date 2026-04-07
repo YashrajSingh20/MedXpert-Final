@@ -1,0 +1,54 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #020617; /* space-950 */
+  color: #f3f4f6; /* gray-100 */
+  margin: 0;
+}
+
+.gradient-bg {
+  background: linear-gradient(135deg, #020617, #0f172a);
+}
+
+.holographic-panel {
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  box-shadow: 0 0 15px rgba(0,242,254,0.1);
+  background-color: rgba(15, 23, 42, 0.4);
+}
+
+.holographic-panel:hover {
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 0 20px rgba(0,242,254,0.2);
+}
+
+.medical-grid-bg {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(0,242,254,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,242,254,0.05) 1px, transparent 1px);
+}
+
+.auth-input {
+  @apply w-full px-3 py-2 rounded-md text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 backdrop-blur-sm transition-all;
+  background-color: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+}
+
+.btn-primary {
+  @apply bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 transition duration-300;
+}
+
+.btn-secondary {
+  @apply bg-gray-700 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition duration-300;
+}
+
+.drawing-canvas {
+  @apply border-2 rounded-lg touch-none w-full h-full;
+  border-color: rgba(0, 242, 254, 0.4);
+  box-shadow: 0 0 10px rgba(0,242,254,0.1);
+  background: rgba(15, 23, 42, 0.8);
+  aspect-ratio: 5/3;
+  touch-action: none;
+}
