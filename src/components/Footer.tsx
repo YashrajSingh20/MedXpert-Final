@@ -19,8 +19,8 @@ const Footer: React.FC = () => {
           </div>
           <div className="w-full md:w-1/3">
             <h4 className="text-lg font-semibold mb-2 text-neo-cyan">Contact</h4>
-            <p className="text-sm mb-1">Email: <a href="mailto:info@medxpert.com" className="hover:text-neo-cyan transition-colors">info@medxpert.com</a></p>
-            <p className="text-sm">Phone: +91 123 456 7890</p>
+            <p className="text-sm mb-1">Email: <a href="mailto:bayasyashraj8@gmail.com" className="hover:text-neo-cyan transition-colors">info@medxpert.com</a></p>
+            <p className="text-sm">Phone: +91 9353641410</p>
           </div>
         </div>
         <div className="mt-8 text-center text-sm text-gray-500 border-t border-space-950 pt-4">
