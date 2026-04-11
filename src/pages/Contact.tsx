@@ -79,14 +79,14 @@ const Contact: React.FC = () => {
               <Mail className="w-6 h-6 text-blue-600 mr-4 mt-1" />
               <div>
                 <h3 className="font-semibold">Email</h3>
-                <p className="text-gray-600">info@healthscriptai.com</p>
+                <p className="text-gray-600">yashraj.singh@cmr.edu.in</p>
               </div>
             </div>
             <div className="flex items-start">
               <Phone className="w-6 h-6 text-blue-600 mr-4 mt-1" />
               <div>
                 <h3 className="font-semibold">Phone</h3>
-                <p className="text-gray-600">+91 123 456 7890</p>
+                <p className="text-gray-600">+91 8951486740</p>
               </div>
             </div>
             <div className="flex items-start">
@@ -94,8 +94,8 @@ const Contact: React.FC = () => {
               <div>
                 <h3 className="font-semibold">Address</h3>
                 <p className="text-gray-600">
-                  123 Tech Park, Sector 15<br />
-                  Gurugram, Haryana 122001<br />
+                  CMR University<br />
+                  Bengaluru,Karnataka-560064<br />
                   India
                 </p>
               </div>
