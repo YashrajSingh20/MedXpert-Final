@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedXpert Workflow Architecture</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.5rem;
+        }
+        .diagram-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        p {
+            margin-bottom: 1rem;
+        }
+    </style>
+    <!-- Load Mermaid.js -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</head>
+<body>
+
+    <h1>MedXpert Workflow Architecture</h1>
+    <p>Here is the complete step-by-step workflow of how data moves through the MedXpert system, showing exactly how the libraries (Dexie, Fuse, Tesseract, jsPDF) interact.</p>
+
+    <h2>1. Complete System Flow</h2>
+    <p>This flowchart shows the end-to-end journey from a Patient entering the clinic to the Medical Store dispensing the medicine.</p>
+    
+    <div class="diagram-container">
+        <div class="mermaid">
+            graph TD
+                %% Roles
+                Doctor((Doctor))
+                Patient((Patient))
+                Pharmacy((Medical Store))
+
+                %% Core Data
+                DB[(IndexedDB <br> via Dexie.js)]
+
+                %% Step 1: Registration
+                Doctor -- "1. Registers Patient" --> Reg[Patient Registration]
+                Reg -- "Generates 14-digit" --> UHID[UHID]
+                UHID -- "Saves to" --> DB
+
+                %% Step 2: Prescription Writing
+                Doctor -- "2. Enters UHID" --> Search[Search Patient]
+                Search -- "Fetches from" --> DB
+                
+                Doctor -- "3. Adds Medicines via" --> InputMethods{Input Methods}
+                InputMethods -->|Type| Typing[Search Box]
+                InputMethods -->|Speak| Voice[Voice Input <br> Web Speech API]
+                InputMethods -->|Draw| Canvas[Drawing Canvas]
+                
+                Canvas -- "Reads Image" --> OCR[Tesseract.js OCR]
+                OCR -- "Raw Text" --> Fuzzy[Fuse.js]
+                Voice -- "Spoken Text" --> Fuzzy
+                Typing -- "Typed Text" --> Fuzzy
+                
+                Fuzzy -- "Matches to" --> DrugList[drugList.ts <br> In-Memory Array]
+                DrugList -- "Selected Medicine" --> PrescForm[Prescription Form]
+
+                %% Step 3: Saving & PDF Generation
+                Doctor -- "4. Clicks Save" --> SavePresc[Save Prescription]
+                PrescForm --> SavePresc
+                SavePresc -- "Formats Document" --> PDF[jsPDF Generator]
+                PDF -- "Base64 String" --> DB
+                SavePresc -- "JSON Data" --> DB
+
+                %% Step 4: Patient Access
+                Patient -- "5. Logs In" --> PatDash[Patient Dashboard]
+                PatDash -- "Fetches by UHID" --> DB
+                PatDash -- "Views/Downloads" --> PDFOut[PDF Prescription]
+
+                %% Step 5: Pharmacy Access
+                Pharmacy -- "6. Enters UHID" --> MedDash[Medical Dashboard]
+                MedDash -- "Fetches by UHID" --> DB
+                MedDash -- "Views" --> PDFOut
+        </div>
+    </div>
+
+    <h2>2. Medicine Input Flow (Deep Dive)</h2>
+    <p>This chart zooms in on the most complex part of the app: how a doctor's input turns into a verified medicine name using Tesseract and Fuse.js.</p>
+    
+    <div class="diagram-container">
+        <div class="mermaid">
+            sequenceDiagram
+                participant Doctor
+                participant UI as Drawing Canvas / Mic
+                participant Tesseract as Tesseract.js (OCR)
+                participant Speech as Web Speech API
+                participant Fuse as Fuse.js
+                participant DrugList as drugList.ts
+                
+                %% Drawing Flow
+                Doctor->>UI: Draws "Amoxclin"
+                UI->>Tesseract: Sends Canvas Image
+                Note over Tesseract: Processing Image...
+                Tesseract->>Fuse: Returns raw text "Amoxclin"
+                
+                %% Voice Flow (Alternative)
+                Doctor->>UI: Speaks "Asprin"
+                UI->>Speech: Listens to audio
+                Speech->>Fuse: Returns raw text "Asprin"
+                
+                %% Matching Process
+                Note over Fuse: Fuzzy Search matching
+                Fuse->>DrugList: Searches array for closest match
+                DrugList-->>Fuse: Found matches
+                Fuse-->>UI: Returns "Amoxicillin" (98% confidence)
+                
+                UI->>Doctor: Shows "Amoxicillin" in Prescription list
+        </div>
+    </div>
+
+    <h2>3. Data Storage Flow (Deep Dive)</h2>
+    <p>This chart shows how Dexie.js handles the data storage when the prescription is finally saved.</p>
+    
+    <div class="diagram-container">
+        <div class="mermaid">
+            sequenceDiagram
+                participant App as MedXpert App
+                participant jsPDF as jsPDF Library
+                participant Dexie as Dexie.js
+                participant Browser as Browser IndexedDB
+                
+                App->>jsPDF: Send Prescription Data (Name, Medicines, Date)
+                Note over jsPDF: Generating PDF Layout
+                jsPDF-->>App: Returns PDF as Base64 String
+                
+                App->>Dexie: db.prescriptions.add({JSON data})
+                Dexie->>Browser: Write to 'prescriptions' table
+                
+                App->>Dexie: db.records.add({title, base64_pdf})
+                Dexie->>Browser: Write to 'records' table
+                
+                Note over Browser: Data permanently saved locally!
+        </div>
+    </div>
+
+</body>
+</html>

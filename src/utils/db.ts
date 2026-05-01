@@ -1,4 +1,6 @@
-import Dexie, { Table } from 'dexie';
+import { supabase } from './supabase';
+
+// ─── Interfaces (same as before — no change needed in the rest of the app) ───
 
 export interface Patient {
   id?: number;
@@ -9,7 +11,7 @@ export interface Patient {
   dateOfBirth: string;
   bloodGroup: string;
   aadhaar: string;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
 export interface Doctor {
@@ -29,7 +31,7 @@ export interface Prescription {
   symptoms: string;
   hereditaryDiseases: string;
   doctor: Doctor;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
 export interface Medicine {
@@ -47,27 +49,11 @@ export interface Record {
   type: 'prescription' | 'image';
   title: string;
   data: string;
-  createdAt: Date;
+  createdAt?: Date;
 }
 
-class HealthScriptDB extends Dexie {
-  patients!: Table<Patient>;
-  prescriptions!: Table<Prescription>;
-  records!: Table<Record>;
+// ─── Generate UHID ────────────────────────────────────────────────────────────
 
-  constructor() {
-    super('HealthScriptDB');
-    this.version(1).stores({
-      patients: '++id, uhid, name, aadhaar',
-      prescriptions: '++id, uhid, createdAt',
-      records: '++id, uhid, type, createdAt'
-    });
-  }
-}
-
-export const db = new HealthScriptDB();
-
-// Generate UHID
 export const generateUHID = async (): Promise<string> => {
   const year = new Date().getFullYear().toString();
   let isUnique = false;
@@ -76,61 +62,171 @@ export const generateUHID = async (): Promise<string> => {
   while (!isUnique) {
     const random = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
     uhid = year + random;
-    const exists = await db.patients.where('uhid').equals(uhid).count();
-    if (exists === 0) {
-      isUnique = true;
-    }
+
+    const { count } = await supabase
+      .from('patients')
+      .select('*', { count: 'exact', head: true })
+      .eq('uhid', uhid);
+
+    if (count === 0) isUnique = true;
   }
+
   return uhid;
 };
 
-// Patient functions
-export const registerPatient = async (patient: Omit<Patient, 'id' | 'createdAt' | 'uhid'>): Promise<string> => {
+// ─── Patient Functions ────────────────────────────────────────────────────────
+
+export const registerPatient = async (
+  patient: Omit<Patient, 'id' | 'createdAt' | 'uhid'>
+): Promise<string> => {
   const uhid = await generateUHID();
-  await db.patients.add({
-    ...patient,
+
+  const { error } = await supabase.from('patients').insert({
     uhid,
-    createdAt: new Date()
+    name: patient.name,
+    gender: patient.gender,
+    age: patient.age,
+    date_of_birth: patient.dateOfBirth,
+    blood_group: patient.bloodGroup,
+    aadhaar: patient.aadhaar,
   });
+
+  if (error) throw new Error(`Failed to register patient: ${error.message}`);
   return uhid;
 };
 
 export const getPatientByUHID = async (uhid: string): Promise<Patient | undefined> => {
-  return await db.patients.where('uhid').equals(uhid).first();
+  const { data, error } = await supabase
+    .from('patients')
+    .select('*')
+    .eq('uhid', uhid)
+    .single();
+
+  if (error || !data) return undefined;
+
+  return {
+    id: data.id,
+    uhid: data.uhid,
+    name: data.name,
+    gender: data.gender,
+    age: data.age,
+    dateOfBirth: data.date_of_birth,
+    bloodGroup: data.blood_group,
+    aadhaar: data.aadhaar,
+    createdAt: new Date(data.created_at),
+  };
 };
 
 export const getPatientByAadhaar = async (aadhaar: string): Promise<Patient | undefined> => {
-  return await db.patients.where('aadhaar').equals(aadhaar).first();
+  const { data, error } = await supabase
+    .from('patients')
+    .select('*')
+    .eq('aadhaar', aadhaar)
+    .single();
+
+  if (error || !data) return undefined;
+
+  return {
+    id: data.id,
+    uhid: data.uhid,
+    name: data.name,
+    gender: data.gender,
+    age: data.age,
+    dateOfBirth: data.date_of_birth,
+    bloodGroup: data.blood_group,
+    aadhaar: data.aadhaar,
+    createdAt: new Date(data.created_at),
+  };
 };
 
-// Prescription functions
-export const savePrescription = async (prescription: Omit<Prescription, 'id' | 'createdAt'>): Promise<number> => {
-  return await db.prescriptions.add({
-    ...prescription,
-    createdAt: new Date()
-  });
+// ─── Prescription Functions ───────────────────────────────────────────────────
+
+export const savePrescription = async (
+  prescription: Omit<Prescription, 'id' | 'createdAt'>
+): Promise<number> => {
+  const { data, error } = await supabase
+    .from('prescriptions')
+    .insert({
+      uhid: prescription.uhid,
+      medicines: prescription.medicines,
+      allergies: prescription.allergies,
+      symptoms: prescription.symptoms,
+      hereditary_diseases: prescription.hereditaryDiseases,
+      doctor: prescription.doctor,
+    })
+    .select('id')
+    .single();
+
+  if (error) throw new Error(`Failed to save prescription: ${error.message}`);
+  return data.id;
 };
 
 export const getPrescriptionsByUHID = async (uhid: string): Promise<Prescription[]> => {
-  return await db.prescriptions.where('uhid').equals(uhid).reverse().sortBy('createdAt');
+  const { data, error } = await supabase
+    .from('prescriptions')
+    .select('*')
+    .eq('uhid', uhid)
+    .order('created_at', { ascending: false });
+
+  if (error || !data) return [];
+
+  return data.map((row) => ({
+    id: row.id,
+    uhid: row.uhid,
+    medicines: row.medicines,
+    allergies: row.allergies,
+    symptoms: row.symptoms,
+    hereditaryDiseases: row.hereditary_diseases,
+    doctor: row.doctor,
+    createdAt: new Date(row.created_at),
+  }));
 };
 
 export const deletePrescription = async (id: number): Promise<void> => {
-  await db.prescriptions.delete(id);
+  const { error } = await supabase.from('prescriptions').delete().eq('id', id);
+  if (error) throw new Error(`Failed to delete prescription: ${error.message}`);
 };
 
-// Record functions
-export const saveRecord = async (record: Omit<Record, 'id' | 'createdAt'>): Promise<number> => {
-  return await db.records.add({
-    ...record,
-    createdAt: new Date()
-  });
+// ─── Record Functions ─────────────────────────────────────────────────────────
+
+export const saveRecord = async (
+  record: Omit<Record, 'id' | 'createdAt'>
+): Promise<number> => {
+  const { data, error } = await supabase
+    .from('records')
+    .insert({
+      uhid: record.uhid,
+      type: record.type,
+      title: record.title,
+      data: record.data,
+    })
+    .select('id')
+    .single();
+
+  if (error) throw new Error(`Failed to save record: ${error.message}`);
+  return data.id;
 };
 
 export const getRecordsByUHID = async (uhid: string): Promise<Record[]> => {
-  return await db.records.where('uhid').equals(uhid).reverse().sortBy('createdAt');
+  const { data, error } = await supabase
+    .from('records')
+    .select('*')
+    .eq('uhid', uhid)
+    .order('created_at', { ascending: false });
+
+  if (error || !data) return [];
+
+  return data.map((row) => ({
+    id: row.id,
+    uhid: row.uhid,
+    type: row.type,
+    title: row.title,
+    data: row.data,
+    createdAt: new Date(row.created_at),
+  }));
 };
 
 export const deleteRecord = async (id: number): Promise<void> => {
-  await db.records.delete(id);
+  const { error } = await supabase.from('records').delete().eq('id', id);
+  if (error) throw new Error(`Failed to delete record: ${error.message}`);
 };
