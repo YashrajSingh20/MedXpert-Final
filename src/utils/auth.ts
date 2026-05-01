@@ -1,4 +1,4 @@
-import { db } from './db';
+import { supabase } from './supabase';
 
 interface BaseUser {
   email?: string;
@@ -73,8 +73,14 @@ export const verifyEmail = async (email: string): Promise<boolean> => {
 
 export const verifyUHID = async (uhid: string): Promise<boolean> => {
   try {
-    const patient = await db.patients.where('uhid').equals(uhid).first();
-    return Boolean(patient);
+    const { data, error } = await supabase
+      .from('patients')
+      .select('uhid')
+      .eq('uhid', uhid)
+      .single();
+
+    if (error) return false;
+    return Boolean(data);
   } catch (err) {
     console.error('Error verifying UHID:', err);
     return false;
