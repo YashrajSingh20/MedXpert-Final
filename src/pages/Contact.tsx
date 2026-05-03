@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import AnimatedBackground from '../components/AnimatedBackground';
@@ -8,6 +8,14 @@ import PageTransition from '../components/PageTransition';
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
+  const timerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -15,7 +23,8 @@ const Contact: React.FC = () => {
     e.preventDefault();
     setSent(true);
     setFormData({ name: '', email: '', message: '' });
-    setTimeout(() => setSent(false), 3000);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = window.setTimeout(() => setSent(false), 3000);
   };
 
   const contactItems = [

@@ -251,7 +251,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ onDrawingComplete }) => {
                   <button
                     key={index}
                     onClick={() => onDrawingComplete('', alt)}
-                    className="px-3 py-1 bg-navy-700 rounded-full text-sm hover:bg-navy-700 transition-colors"
+                    className="px-3 py-1 bg-navy-700 rounded-full text-sm hover:bg-navy-600 transition-colors"
                   >
                     {alt}
                   </button>
@@ -265,7 +265,7 @@ const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ onDrawingComplete }) => {
       <div className="flex gap-2">
         <button
           onClick={clearCanvas}
-          className="flex-1 px-4 py-2 bg-navy-700 text-white rounded-lg hover:bg-navy-700 transition-colors flex items-center justify-center gap-2"
+          className="flex-1 px-4 py-2 bg-navy-700 text-white rounded-lg hover:bg-navy-600 transition-colors flex items-center justify-center gap-2"
         >
           <RefreshCcw size={16} />
           Clear Drawing

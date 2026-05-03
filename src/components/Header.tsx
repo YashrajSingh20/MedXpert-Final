@@ -16,6 +16,7 @@ const Header: React.FC = () => {
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -43,6 +44,7 @@ const Header: React.FC = () => {
             className="md:hidden text-med-400 hover:text-white transition-colors"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
+            aria-expanded={isOpen}
             whileTap={{ scale: 0.9 }}
           >
             {isOpen ? <X size={26} /> : <Menu size={26} />}

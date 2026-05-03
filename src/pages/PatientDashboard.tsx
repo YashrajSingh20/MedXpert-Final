@@ -182,7 +182,7 @@ const PatientDashboard: React.FC = () => {
                       {[
                         { icon: Eye, onClick: () => handlePreview(record), title: 'Preview', color: 'text-med-400 hover:bg-med-400/10' },
                         { icon: Download, onClick: () => handleDownload(record), title: 'Download', color: 'text-accent-400 hover:bg-accent-500/10' },
-                        { icon: Trash2, onClick: () => setDeleteConfirm(record.id!), title: 'Delete', color: 'text-red-400 hover:bg-red-500/10' },
+                        { icon: Trash2, onClick: () => { if (record.id) setDeleteConfirm(record.id) }, title: 'Delete', color: 'text-red-400 hover:bg-red-500/10' },
                       ].map(({ icon: Icon, onClick, title, color }) => (
                         <motion.button
                           key={title}
@@ -272,7 +272,7 @@ const PatientDashboard: React.FC = () => {
                   <div className="flex justify-end gap-3">
                     <motion.button
                       onClick={() => setDeleteConfirm(null)}
-                      className="px-4 py-2 bg-navy-700/50 text-white rounded-xl hover:bg-navy-700/50 transition-colors text-sm"
+                      className="px-4 py-2 bg-navy-700/50 text-white rounded-xl hover:bg-navy-600/50 transition-colors text-sm"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >

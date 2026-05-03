@@ -24,9 +24,12 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   useEffect(() => {
     if (!isInView || hasAnimated.current) return;
     hasAnimated.current = true;
+    let rafId: number;
+    let mounted = true;
 
     const startTime = Date.now();
     const animate = () => {
+      if (!mounted) return;
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
       // Ease out cubic
@@ -34,13 +37,20 @@ const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       setCount(Math.floor(eased * target));
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        rafId = requestAnimationFrame(animate);
       } else {
         setCount(target);
       }
     };
 
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
+
+    return () => {
+      mounted = false;
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+    };
   }, [isInView, target, duration]);
 
   return (

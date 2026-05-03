@@ -33,7 +33,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
     { id: 'add-record', label: 'Add Previous Record', icon: FolderPlus },
   ];
 
-  const sidebarContent = (
+  const renderSidebarContent = (contextId: string) => (
     <>
       <div className="mb-8">
         <h2 className="text-lg font-bold shimmer-text">Doctor Dashboard</h2>
@@ -58,7 +58,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
               >
                 {activeView === id && (
                   <motion.div
-                    layoutId="sidebar-active"
+                    layoutId={`sidebar-active-${contextId}`}
                     className="absolute inset-0 bg-gradient-to-r from-med-600/80 to-med-700/60 rounded-xl"
                     transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }}
                   />
@@ -112,7 +112,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
       </AnimatePresence>
 
       <div className="hidden md:flex md:flex-col md:w-64 bg-navy-900/50 backdrop-blur-xl text-white p-4 min-h-full border-r border-med-500/8">
-        {sidebarContent}
+        {renderSidebarContent('desktop')}
       </div>
 
       <AnimatePresence>
@@ -124,7 +124,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeView, onViewChange }) =>
             exit={{ x: '-100%' }}
             transition={{ type: 'spring', bounce: 0.15, duration: 0.5 }}
           >
-            {sidebarContent}
+            {renderSidebarContent('mobile')}
           </motion.div>
         )}
       </AnimatePresence>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, FileText, AlertCircle, Loader2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getPatientByUHID, getPrescriptionsByUHID } from '../utils/db';
@@ -16,6 +16,18 @@ const MedicalDashboard: React.FC = () => {
     title: string;
     data: string;
   } | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && previewData) {
+        setPreviewData(null);
+      }
+    };
+    if (previewData) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [previewData]);
 
   const handleSearch = async () => {
     if (uhid.length !== 14) {
@@ -174,9 +186,9 @@ const MedicalDashboard: React.FC = () => {
                 ) : (
                   <div className="space-y-3">
                     <h4 className="text-lg font-medium text-white mb-3">Prescriptions</h4>
-                    {prescriptions.map((prescription, index) => (
+                    {prescriptions.map((prescription) => (
                       <motion.div
-                        key={index}
+                        key={prescription.id}
                         className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-navy-900/50 border border-gray-800 rounded-xl hover:border-med-400/20 transition-all duration-300 gap-3"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -219,6 +231,7 @@ const MedicalDashboard: React.FC = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
+                onClick={() => setPreviewData(null)}
               >
                 <motion.div 
                   className="glass-card max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
@@ -226,6 +239,7 @@ const MedicalDashboard: React.FC = () => {
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
                   transition={{ type: 'spring', bounce: 0.2 }}
+                  onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center justify-between p-4 border-b border-navy-700/50">
                     <h3 className="text-lg font-semibold text-white">{previewData.title}</h3>

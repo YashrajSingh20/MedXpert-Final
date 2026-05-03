@@ -44,6 +44,7 @@ const GlowCard: React.FC<GlowCardProps> = ({
         transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] } 
       }}
       whileTap={onClick ? { scale: 0.98 } : undefined}
+      {...(as === 'button' ? { type: 'button' } : {})}
     >
       <div
         className="absolute pointer-events-none transition-opacity duration-300 rounded-full"

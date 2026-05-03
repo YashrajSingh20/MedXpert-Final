@@ -42,7 +42,7 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onResult }) => {
         className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
           isListening
             ? 'bg-accent-600 text-white'
-            : 'bg-navy-700 text-white hover:bg-navy-700'
+            : 'bg-navy-700 text-white hover:bg-navy-600'
         }`}
       >
         {isListening ? (

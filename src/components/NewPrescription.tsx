@@ -218,7 +218,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
               type="text"
               value={uhid}
               onChange={(e) => setUhid(e.target.value)}
-              className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
+              className="w-full px-4 py-2 bg-navy-700 border border-navy-600 rounded-lg text-white"
               placeholder="Enter 14-digit UHID"
               maxLength={14}
             />
@@ -282,7 +282,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                   <textarea
                     value={medicalHistory.symptoms}
                     onChange={(e) => setMedicalHistory(prev => ({ ...prev, symptoms: e.target.value }))}
-                    className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white resize-none"
+                    className="w-full px-4 py-2 bg-navy-700 border border-navy-600 rounded-lg text-white resize-none"
                     rows={3}
                     placeholder="Enter current symptoms..."
                   />
@@ -295,7 +295,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                   <textarea
                     value={medicalHistory.allergies}
                     onChange={(e) => setMedicalHistory(prev => ({ ...prev, allergies: e.target.value }))}
-                    className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white resize-none"
+                    className="w-full px-4 py-2 bg-navy-700 border border-navy-600 rounded-lg text-white resize-none"
                     rows={3}
                     placeholder="Enter known allergies..."
                   />
@@ -308,7 +308,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                   <textarea
                     value={medicalHistory.hereditaryDiseases}
                     onChange={(e) => setMedicalHistory(prev => ({ ...prev, hereditaryDiseases: e.target.value }))}
-                    className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white resize-none"
+                    className="w-full px-4 py-2 bg-navy-700 border border-navy-600 rounded-lg text-white resize-none"
                     rows={3}
                     placeholder="Enter hereditary diseases..."
                   />
@@ -409,7 +409,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-navy-700 border border-navy-600 rounded-lg text-white"
                     placeholder="Type to search medicines..."
                   />
                 </div>
@@ -507,7 +507,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                           type="text"
                           value={currentMedicine.dosage || ''}
                           onChange={(e) => setCurrentMedicine({ ...currentMedicine, dosage: e.target.value })}
-                          className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
+                          className="w-full px-4 py-2 bg-navy-700 border border-navy-600 rounded-lg text-white"
                           placeholder="e.g., 1 tablet"
                         />
                       </div>
@@ -518,7 +518,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                           type="number"
                           value={currentMedicine.days || ''}
                           onChange={(e) => setCurrentMedicine({ ...currentMedicine, days: parseInt(e.target.value) })}
-                          className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
+                          className="w-full px-4 py-2 bg-navy-700 border border-navy-600 rounded-lg text-white"
                           min="1"
                         />
                       </div>
