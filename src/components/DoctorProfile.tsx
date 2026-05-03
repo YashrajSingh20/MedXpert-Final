@@ -86,7 +86,7 @@ const DoctorProfile: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center p-8">
-        <Loader2 className="animate-spin text-purple-500" size={32} />
+        <Loader2 className="animate-spin text-accent-500" size={32} />
       </div>
     );
   }
@@ -100,7 +100,7 @@ const DoctorProfile: React.FC = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+    <div className="max-w-2xl mx-auto bg-navy-800 rounded-lg shadow-lg overflow-hidden">
       {error && (
         <div className="p-4 bg-red-900/50 border border-red-500 text-red-200 flex items-center">
           <AlertCircle className="mr-2" size={20} />
@@ -109,16 +109,16 @@ const DoctorProfile: React.FC = () => {
       )}
 
       <div className="relative">
-        <div className="h-32 bg-gradient-to-r from-purple-600 to-blue-600"></div>
+        <div className="h-32 bg-gradient-to-r from-accent-600 to-blue-600"></div>
         <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
           <div className="relative">
             <img
               src={editedProfile?.photo || '/default-avatar.png'}
               alt="Profile"
-              className="w-32 h-32 rounded-full border-4 border-gray-800 bg-gray-700"
+              className="w-32 h-32 rounded-full border-4 border-gray-800 bg-navy-700"
             />
             {isEditing && (
-              <label className="absolute bottom-0 right-0 p-2 bg-purple-600 rounded-full cursor-pointer hover:bg-purple-700 transition-colors">
+              <label className="absolute bottom-0 right-0 p-2 bg-accent-600 rounded-full cursor-pointer hover:bg-accent-700 transition-colors">
                 <Camera size={20} className="text-white" />
                 <input
                   type="file"
@@ -140,7 +140,7 @@ const DoctorProfile: React.FC = () => {
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-accent-600 text-white rounded-lg hover:bg-accent-700 transition-colors disabled:opacity-50"
               >
                 {isSaving ? (
                   <>
@@ -160,7 +160,7 @@ const DoctorProfile: React.FC = () => {
                   setEditedProfile(profile);
                   setError('');
                 }}
-                className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 bg-navy-700 text-white rounded-lg hover:bg-navy-700 transition-colors"
               >
                 <X size={16} />
                 Cancel
@@ -169,7 +169,7 @@ const DoctorProfile: React.FC = () => {
           ) : (
             <button
               onClick={() => setIsEditing(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-navy-700 text-white rounded-lg hover:bg-navy-700 transition-colors"
             >
               <Edit2 size={16} />
               Edit Profile
@@ -177,7 +177,7 @@ const DoctorProfile: React.FC = () => {
           )}
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-gray-400 text-sm mb-1">Full Name</label>
             {isEditing ? (
@@ -188,7 +188,7 @@ const DoctorProfile: React.FC = () => {
                   ...prev,
                   name: e.target.value
                 } : null)}
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
               />
             ) : (
               <p className="text-white">{profile.name}</p>
@@ -215,7 +215,7 @@ const DoctorProfile: React.FC = () => {
                   ...prev,
                   department: e.target.value
                 } : null)}
-                className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
               />
             ) : (
               <p className="text-white">{profile.department}</p>

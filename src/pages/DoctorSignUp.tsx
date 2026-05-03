@@ -84,7 +84,7 @@ const DoctorSignUp: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-navy-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
@@ -92,7 +92,7 @@ const DoctorSignUp: React.FC = () => {
           </h2>
           <p className="mt-2 text-center text-sm text-gray-400">
             Already have an account?{' '}
-            <Link to="/login" className="font-medium text-purple-400 hover:text-purple-500">
+            <Link to="/login" className="font-medium text-accent-400 hover:text-accent-500">
               Sign in
             </Link>
           </p>
@@ -131,7 +131,7 @@ const DoctorSignUp: React.FC = () => {
                 ) : (
                   <div
                     onClick={() => fileInputRef.current?.click()}
-                    className="h-24 w-24 rounded-full border-2 border-dashed border-gray-600 flex items-center justify-center cursor-pointer hover:border-purple-500"
+                    className="h-24 w-24 rounded-full border-2 border-dashed border-navy-700 flex items-center justify-center cursor-pointer hover:border-accent-500"
                   >
                     <Upload className="h-8 w-8 text-gray-400" />
                   </div>
@@ -233,7 +233,7 @@ const DoctorSignUp: React.FC = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50"
+            className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-accent-600 hover:bg-accent-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500 disabled:opacity-50"
           >
             {isLoading ? (
               <>

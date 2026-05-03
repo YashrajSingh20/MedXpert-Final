@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FileText, AlertCircle, Download, Eye, X, Trash2, Loader2, Image } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getCurrentUser } from '../utils/auth';
 import { getPatientByUHID, getRecordsByUHID, deleteRecord } from '../utils/db';
 import type { Patient, Record } from '../utils/db';
+import PageTransition from '../components/PageTransition';
 
 const PatientDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -87,14 +89,20 @@ const PatientDashboard: React.FC = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-900 py-12 px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-red-900/50 border border-red-500 rounded-lg p-4 text-red-200 flex items-center">
-            <AlertCircle className="mr-2" size={20} />
-            <span>{error}</span>
+      <PageTransition>
+        <div className="min-h-screen bg-navy-950 py-12 px-4">
+          <div className="max-w-3xl mx-auto">
+            <motion.div 
+              className="glass-card p-4 text-red-400 flex items-center border border-red-500/20"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <AlertCircle className="mr-2" size={20} />
+              <span>{error}</span>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </PageTransition>
     );
   }
 
@@ -103,156 +111,200 @@ const PatientDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 py-12 px-4">
-      <div className="max-w-3xl mx-auto space-y-8">
-        <div className="bg-gray-800 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">Patient Information</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-gray-400">Name</p>
-              <p className="text-white font-medium">{patient.name}</p>
-            </div>
-            <div>
-              <p className="text-gray-400">UHID</p>
-              <p className="text-white font-medium">{patient.uhid}</p>
-            </div>
-            <div>
-              <p className="text-gray-400">Age</p>
-              <p className="text-white font-medium">{patient.age} years</p>
-            </div>
-            <div>
-              <p className="text-gray-400">Gender</p>
-              <p className="text-white font-medium">{patient.gender}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-gray-800 rounded-lg p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">Medical Records</h2>
-          {records.length === 0 ? (
-            <p className="text-gray-400 text-center py-8">No medical records found</p>
-          ) : (
-            <div className="space-y-4">
-              {records.map((record) => (
-                <div
-                  key={record.id}
-                  className="flex items-center justify-between p-4 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors"
+    <PageTransition>
+      <div className="min-h-screen bg-navy-950 medical-grid-bg py-12 px-4">
+        <div className="max-w-3xl mx-auto space-y-8">
+          {/* Patient Info */}
+          <motion.div 
+            className="glass-card p-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <h2 className="text-2xl font-bold text-white mb-4">Patient Information</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { label: 'Name', value: patient.name },
+                { label: 'UHID', value: patient.uhid },
+                { label: 'Age', value: `${patient.age} years` },
+                { label: 'Gender', value: patient.gender },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.label}
+                  className="bg-navy-900/50 border border-med-400/10 p-4 rounded-xl"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * i }}
                 >
-                  <div className="flex items-center gap-4">
-                    {record.type === 'image' ? (
-                      <Image className="text-purple-400" size={24} />
-                    ) : (
-                      <FileText className="text-purple-400" size={24} />
-                    )}
-                    <div>
-                      <h4 className="text-white font-medium">{record.title}</h4>
-                      <p className="text-gray-400">
-                        {new Date(record.createdAt).toLocaleDateString()}
-                      </p>
-                      <p className="text-gray-400">
-                        Type: {record.type.toUpperCase()}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => handlePreview(record)}
-                      className="text-purple-400 hover:text-purple-300 p-2 rounded-full hover:bg-gray-500"
-                      title="Preview"
-                    >
-                      <Eye size={20} />
-                    </button>
-                    <button
-                      onClick={() => handleDownload(record)}
-                      className="text-purple-400 hover:text-purple-300 p-2 rounded-full hover:bg-gray-500"
-                      title="Download"
-                    >
-                      <Download size={20} />
-                    </button>
-                    <button
-                      onClick={() => setDeleteConfirm(record.id!)}
-                      className="text-red-400 hover:text-red-300 p-2 rounded-full hover:bg-gray-500"
-                      title="Delete"
-                    >
-                      <Trash2 size={20} />
-                    </button>
-                  </div>
-                </div>
+                  <p className="text-gray-500 text-xs uppercase tracking-widest mb-1">{item.label}</p>
+                  <p className="text-white font-medium">{item.value}</p>
+                </motion.div>
               ))}
             </div>
-          )}
+          </motion.div>
+
+          {/* Medical Records */}
+          <motion.div 
+            className="glass-card p-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+          >
+            <h2 className="text-2xl font-bold text-white mb-4">Medical Records</h2>
+            {records.length === 0 ? (
+              <p className="text-gray-500 text-center py-8">No medical records found</p>
+            ) : (
+              <div className="space-y-3">
+                {records.map((record, i) => (
+                  <motion.div
+                    key={record.id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-navy-900/50 border border-gray-800 rounded-xl hover:border-med-400/20 transition-all duration-300 gap-3"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.05 * i }}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="p-2 rounded-lg bg-accent-500/10 border border-accent-500/20">
+                        {record.type === 'image' ? (
+                          <Image className="text-accent-400" size={20} />
+                        ) : (
+                          <FileText className="text-accent-400" size={20} />
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="text-white font-medium text-sm">{record.title}</h4>
+                        <p className="text-gray-500 text-xs">
+                          {new Date(record.createdAt).toLocaleDateString()} · {record.type.toUpperCase()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {[
+                        { icon: Eye, onClick: () => handlePreview(record), title: 'Preview', color: 'text-med-400 hover:bg-med-400/10' },
+                        { icon: Download, onClick: () => handleDownload(record), title: 'Download', color: 'text-accent-400 hover:bg-accent-500/10' },
+                        { icon: Trash2, onClick: () => setDeleteConfirm(record.id!), title: 'Delete', color: 'text-red-400 hover:bg-red-500/10' },
+                      ].map(({ icon: Icon, onClick, title, color }) => (
+                        <motion.button
+                          key={title}
+                          onClick={onClick}
+                          className={`${color} p-2 rounded-lg transition-all duration-200`}
+                          title={title}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          <Icon size={18} />
+                        </motion.button>
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+
+          {/* Preview Modal */}
+          <AnimatePresence>
+            {previewData && (
+              <motion.div 
+                className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <motion.div 
+                  className="glass-card max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden"
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  transition={{ type: 'spring', bounce: 0.2 }}
+                >
+                  <div className="flex items-center justify-between p-4 border-b border-navy-700/50">
+                    <h3 className="text-lg font-semibold text-white">{previewData.title}</h3>
+                    <motion.button
+                      onClick={() => setPreviewData(null)}
+                      className="text-gray-400 hover:text-white p-1.5 rounded-lg hover:bg-navy-700/50 transition-colors"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <X size={20} />
+                    </motion.button>
+                  </div>
+                  <div className="flex-1 overflow-auto p-4">
+                    {previewData.type === 'pdf' ? (
+                      <iframe
+                        src={previewData.data}
+                        className="w-full h-full min-h-[60vh] rounded-lg"
+                        title="PDF Preview"
+                      />
+                    ) : (
+                      <img
+                        src={previewData.data}
+                        alt={previewData.title}
+                        className="max-w-full h-auto mx-auto rounded-lg"
+                      />
+                    )}
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Delete Confirmation Modal */}
+          <AnimatePresence>
+            {deleteConfirm !== null && (
+              <motion.div 
+                className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <motion.div 
+                  className="glass-card p-6 max-w-md w-full"
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  transition={{ type: 'spring', bounce: 0.2 }}
+                >
+                  <h3 className="text-xl font-semibold text-white mb-4">Confirm Delete</h3>
+                  <p className="text-gray-400 mb-6 text-sm">
+                    Are you sure you want to delete this record? This action cannot be undone.
+                  </p>
+                  <div className="flex justify-end gap-3">
+                    <motion.button
+                      onClick={() => setDeleteConfirm(null)}
+                      className="px-4 py-2 bg-navy-700/50 text-white rounded-xl hover:bg-navy-700/50 transition-colors text-sm"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      Cancel
+                    </motion.button>
+                    <motion.button
+                      onClick={handleDelete}
+                      disabled={isDeleting}
+                      className="px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors flex items-center gap-2 disabled:opacity-50 text-sm"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {isDeleting ? (
+                        <>
+                          <Loader2 className="animate-spin" size={16} />
+                          Deleting...
+                        </>
+                      ) : (
+                        <>
+                          <Trash2 size={16} />
+                          Delete
+                        </>
+                      )}
+                    </motion.button>
+                  </div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-
-        {/* Preview Modal */}
-        {previewData && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-            <div className="bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] flex flex-col">
-              <div className="flex items-center justify-between p-4 border-b border-gray-700">
-                <h3 className="text-xl font-semibold text-white">{previewData.title}</h3>
-                <button
-                  onClick={() => setPreviewData(null)}
-                  className="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700"
-                >
-                  <X size={24} />
-                </button>
-              </div>
-              <div className="flex-1 overflow-auto p-4">
-                {previewData.type === 'pdf' ? (
-                  <iframe
-                    src={previewData.data}
-                    className="w-full h-full min-h-[60vh] rounded-lg"
-                    title="PDF Preview"
-                  />
-                ) : (
-                  <img
-                    src={previewData.data}
-                    alt={previewData.title}
-                    className="max-w-full h-auto mx-auto rounded-lg"
-                  />
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Delete Confirmation Modal */}
-        {deleteConfirm !== null && (
-          <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-            <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full">
-              <h3 className="text-xl font-semibold text-white mb-4">Confirm Delete</h3>
-              <p className="text-gray-300 mb-6">
-                Are you sure you want to delete this record? This action cannot be undone.
-              </p>
-              <div className="flex justify-end gap-4">
-                <button
-                  onClick={() => setDeleteConfirm(null)}
-                  className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleDelete}
-                  disabled={isDeleting}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 disabled:opacity-50"
-                >
-                  {isDeleting ? (
-                    <>
-                      <Loader2 className="animate-spin" size={16} />
-                      Deleting...
-                    </>
-                  ) : (
-                    <>
-                      <Trash2 size={16} />
-                      Delete
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-    </div>
+    </PageTransition>
   );
 };
 

@@ -41,8 +41,8 @@ const VoiceInput: React.FC<VoiceInputProps> = ({ onResult }) => {
         disabled={isListening}
         className={`w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg transition-colors ${
           isListening
-            ? 'bg-purple-600 text-white'
-            : 'bg-gray-700 text-white hover:bg-gray-600'
+            ? 'bg-accent-600 text-white'
+            : 'bg-navy-700 text-white hover:bg-navy-700'
         }`}
       >
         {isListening ? (

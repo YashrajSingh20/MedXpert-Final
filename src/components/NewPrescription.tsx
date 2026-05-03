@@ -209,16 +209,16 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
   };
 
   return (
-    <div className="space-y-6 p-8">
-      <div className="bg-gray-800 p-6 rounded-lg">
-        <div className="flex gap-4 items-end mb-6">
+    <div className="space-y-4 md:space-y-6 p-4 md:p-8">
+      <div className="bg-navy-800 p-6 rounded-lg">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-end mb-4 md:mb-6">
           <div className="flex-1">
             <label className="block text-gray-300 mb-2">Patient UHID</label>
             <input
               type="text"
               value={uhid}
               onChange={(e) => setUhid(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+              className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
               placeholder="Enter 14-digit UHID"
               maxLength={14}
             />
@@ -226,7 +226,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
           <button
             onClick={() => handleUHIDSearch()}
             disabled={isLoading}
-            className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+            className="bg-accent-600 text-white px-6 py-2 rounded-lg hover:bg-accent-700 transition-colors disabled:opacity-50 flex items-center gap-2"
           >
             {isLoading ? <Loader2 className="animate-spin" size={20} /> : <Search size={20} />}
             {isLoading ? 'Searching...' : 'Search'}
@@ -243,27 +243,27 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
         {!patient && !error && !isLoading && (
           <button
             onClick={onRegisterClick}
-            className="text-purple-400 hover:text-purple-300"
+            className="text-accent-400 hover:text-accent-300"
           >
             Patient not found? Register here
           </button>
         )}
 
         {patient && (
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="bg-gray-700 p-4 rounded-lg">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+            <div className="bg-navy-700 p-4 rounded-lg">
               <span className="block text-gray-400 text-sm">Name</span>
               <span className="text-white">{patient.name}</span>
             </div>
-            <div className="bg-gray-700 p-4 rounded-lg">
+            <div className="bg-navy-700 p-4 rounded-lg">
               <span className="block text-gray-400 text-sm">Age</span>
               <span className="text-white">{patient.age} years</span>
             </div>
-            <div className="bg-gray-700 p-4 rounded-lg">
+            <div className="bg-navy-700 p-4 rounded-lg">
               <span className="block text-gray-400 text-sm">Gender</span>
               <span className="text-white">{patient.gender}</span>
             </div>
-            <div className="bg-gray-700 p-4 rounded-lg">
+            <div className="bg-navy-700 p-4 rounded-lg">
               <span className="block text-gray-400 text-sm">Aadhaar</span>
               <span className="text-white">XXXX-XXXX-{patient.aadhaar.slice(-4)}</span>
             </div>
@@ -273,7 +273,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
 
       {patient && (
         <>
-          <div className="bg-gray-800 p-6 rounded-lg">
+          <div className="bg-navy-800 p-6 rounded-lg">
             <h3 className="text-xl font-semibold text-white mb-4">Medical History</h3>
             <div className="space-y-4">
               <div>
@@ -282,7 +282,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                   <textarea
                     value={medicalHistory.symptoms}
                     onChange={(e) => setMedicalHistory(prev => ({ ...prev, symptoms: e.target.value }))}
-                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white resize-none"
+                    className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white resize-none"
                     rows={3}
                     placeholder="Enter current symptoms..."
                   />
@@ -295,7 +295,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                   <textarea
                     value={medicalHistory.allergies}
                     onChange={(e) => setMedicalHistory(prev => ({ ...prev, allergies: e.target.value }))}
-                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white resize-none"
+                    className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white resize-none"
                     rows={3}
                     placeholder="Enter known allergies..."
                   />
@@ -308,7 +308,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                   <textarea
                     value={medicalHistory.hereditaryDiseases}
                     onChange={(e) => setMedicalHistory(prev => ({ ...prev, hereditaryDiseases: e.target.value }))}
-                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white resize-none"
+                    className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white resize-none"
                     rows={3}
                     placeholder="Enter hereditary diseases..."
                   />
@@ -319,13 +319,13 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
           </div>
 
           {medicines.length > 0 && (
-            <div className="bg-gray-800 p-6 rounded-lg">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-semibold text-white">Current Prescription</h3>
-                <div className="flex gap-4">
+            <div className="bg-navy-800 p-6 rounded-lg">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+                <h3 className="text-lg md:text-xl font-semibold text-white">Current Prescription</h3>
+                <div className="flex gap-3 w-full sm:w-auto">
                   <button
                     onClick={handleBookMedicine}
-                    className="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2"
+                    className="bg-emerald-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 flex-1 sm:flex-none text-sm md:text-base"
                   >
                     <ShoppingCart size={20} />
                     Book Medicine
@@ -333,7 +333,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                   <button
                     onClick={handleSavePrescription}
                     disabled={isSaving}
-                    className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+                    className="bg-accent-600 text-white px-4 md:px-6 py-2 md:py-3 rounded-lg hover:bg-accent-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 flex-1 sm:flex-none text-sm md:text-base"
                   >
                     {isSaving ? (
                       <>
@@ -352,7 +352,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
 
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-white">
-                  <thead className="bg-gray-700">
+                  <thead className="bg-navy-700">
                     <tr>
                       <th className="p-4">S.No.</th>
                       <th className="p-4">Medicine</th>
@@ -365,7 +365,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                   </thead>
                   <tbody>
                     {medicines.map((medicine, index) => (
-                      <tr key={medicine.id} className="border-b border-gray-700">
+                      <tr key={medicine.id} className="border-b border-navy-700">
                         <td className="p-4">{index + 1}</td>
                         <td className="p-4">{medicine.name}</td>
                         <td className="p-4">{medicine.timing.join(', ')}</td>
@@ -388,18 +388,18 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-gray-800 p-6 rounded-lg">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="bg-navy-800 p-6 rounded-lg">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-semibold text-white">Draw Medicine Name</h3>
                 {isAnalyzing && (
-                  <span className="text-purple-400">Analyzing...</span>
+                  <span className="text-accent-400">Analyzing...</span>
                 )}
               </div>
               <DrawingCanvas onDrawingComplete={handleDrawingComplete} />
             </div>
 
-            <div className="bg-gray-800 p-6 rounded-lg">
+            <div className="bg-navy-800 p-6 rounded-lg">
               <h3 className="text-xl font-semibold text-white mb-4">Medicine Details</h3>
               
               <div className="space-y-4 mb-6">
@@ -409,7 +409,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                    className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
                     placeholder="Type to search medicines..."
                   />
                 </div>
@@ -429,7 +429,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                     <button
                       key={drug}
                       onClick={() => setCurrentMedicine({ ...currentMedicine, name: drug })}
-                      className="block w-full text-left px-4 py-2 bg-gray-700 rounded-lg text-white hover:bg-gray-600"
+                      className="block w-full text-left px-4 py-2 bg-navy-700 rounded-lg text-white hover:bg-navy-700"
                     >
                       {drug}
                     </button>
@@ -439,7 +439,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                     <>
                       <div>
                         <label className="block text-gray-300 mb-2">Selected Medicine</label>
-                        <div className="flex items-center gap-2 px-4 py-2 bg-gray-700 rounded-lg">
+                        <div className="flex items-center gap-2 px-4 py-2 bg-navy-700 rounded-lg">
                           <span className="text-white flex-1">{currentMedicine.name}</span>
                           <button
                             onClick={() => setCurrentMedicine({})}
@@ -452,7 +452,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
 
                       <div>
                         <label className="block text-gray-300 mb-2">Timing</label>
-                        <div className="flex gap-4">
+                        <div className="flex flex-wrap gap-2 sm:gap-4">
                           {['morning', 'afternoon', 'evening'].map((time) => (
                             <button
                               key={time}
@@ -465,8 +465,8 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                               }}
                               className={`px-4 py-2 rounded-lg ${
                                 currentMedicine.timing?.includes(time as any)
-                                  ? 'bg-purple-600 text-white'
-                                  : 'bg-gray-700 text-gray-300'
+                                  ? 'bg-accent-600 text-white'
+                                  : 'bg-navy-700 text-gray-300'
                               }`}
                             >
                               {time}
@@ -482,8 +482,8 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                             onClick={() => setCurrentMedicine({ ...currentMedicine, beforeFood: true })}
                             className={`px-4 py-2 rounded-lg ${
                               currentMedicine.beforeFood
-                                ? 'bg-purple-600 text-white'
-                                : 'bg-gray-700 text-gray-300'
+                                ? 'bg-accent-600 text-white'
+                                : 'bg-navy-700 text-gray-300'
                             }`}
                           >
                             Before Food
@@ -492,8 +492,8 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                             onClick={() => setCurrentMedicine({ ...currentMedicine, beforeFood: false })}
                             className={`px-4 py-2 rounded-lg ${
                               currentMedicine.beforeFood === false
-                                ? 'bg-purple-600 text-white'
-                                : 'bg-gray-700 text-gray-300'
+                                ? 'bg-accent-600 text-white'
+                                : 'bg-navy-700 text-gray-300'
                             }`}
                           >
                             After Food
@@ -507,7 +507,7 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                           type="text"
                           value={currentMedicine.dosage || ''}
                           onChange={(e) => setCurrentMedicine({ ...currentMedicine, dosage: e.target.value })}
-                          className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                          className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
                           placeholder="e.g., 1 tablet"
                         />
                       </div>
@@ -518,14 +518,14 @@ const NewPrescription: React.FC<NewPrescriptionProps> = ({ onRegisterClick, init
                           type="number"
                           value={currentMedicine.days || ''}
                           onChange={(e) => setCurrentMedicine({ ...currentMedicine, days: parseInt(e.target.value) })}
-                          className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                          className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
                           min="1"
                         />
                       </div>
 
                       <button
                         onClick={addMedicine}
-                        className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-accent-600 text-white px-4 py-2 rounded-lg hover:bg-accent-700 transition-colors flex items-center justify-center gap-2"
                       >
                         <Plus size={20} />
                         Add Medicine

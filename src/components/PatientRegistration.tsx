@@ -86,11 +86,11 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({ onRegi
 
   if (registrationSuccess) {
     return (
-      <div className="max-w-2xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+      <div className="max-w-2xl mx-auto bg-navy-800 p-8 rounded-lg shadow-lg">
         <div className="text-center space-y-4">
           <CheckCircle2 className="mx-auto h-16 w-16 text-green-500" />
           <h2 className="text-2xl font-bold text-white">Registration Successful!</h2>
-          <div className="bg-gray-700 p-4 rounded-lg">
+          <div className="bg-navy-700 p-4 rounded-lg">
             <p className="text-gray-300 mb-2">Patient UHID:</p>
             <p className="text-2xl font-mono text-white">{registrationSuccess.uhid}</p>
           </div>
@@ -99,7 +99,7 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({ onRegi
           </p>
           <button
             onClick={handleContinue}
-            className="w-full bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors mt-4"
+            className="w-full bg-accent-600 text-white px-6 py-3 rounded-lg hover:bg-accent-700 transition-colors mt-4"
           >
             Continue to Prescription
           </button>
@@ -111,7 +111,7 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({ onRegi
   const maxDate = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="max-w-2xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+    <div className="max-w-2xl mx-auto bg-navy-800 p-8 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-white mb-6">Patient Registration</h2>
       
       {error && (
@@ -127,7 +127,7 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({ onRegi
           <input
             type="text"
             required
-            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+            className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           />
@@ -137,7 +137,7 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({ onRegi
           <label className="block text-gray-300 mb-2">Gender</label>
           <select
             required
-            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+            className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
             value={formData.gender}
             onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
           >
@@ -154,7 +154,7 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({ onRegi
             type="date"
             required
             max={maxDate}
-            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+            className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
             value={formData.dateOfBirth}
             onChange={handleDateChange}
           />
@@ -164,7 +164,7 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({ onRegi
           <label className="block text-gray-300 mb-2">Blood Group</label>
           <select
             required
-            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+            className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
             value={formData.bloodGroup}
             onChange={(e) => setFormData({ ...formData, bloodGroup: e.target.value })}
           >
@@ -182,7 +182,7 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({ onRegi
             required
             pattern="\d{12}"
             maxLength={12}
-            className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+            className="w-full px-4 py-2 bg-navy-700 border border-navy-700 rounded-lg text-white"
             value={formData.aadhaar}
             onChange={(e) => setFormData({ ...formData, aadhaar: e.target.value.replace(/\D/g, '').slice(0, 12) })}
             placeholder="Enter 12-digit Aadhaar number"
@@ -193,7 +193,7 @@ export const PatientRegistration: React.FC<PatientRegistrationProps> = ({ onRegi
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-accent-600 text-white px-6 py-2 rounded-lg hover:bg-accent-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

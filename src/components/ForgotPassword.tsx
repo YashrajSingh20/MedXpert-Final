@@ -86,17 +86,17 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ type, onBack }) => {
   };
 
   return (
-    <div className="bg-gray-800 p-8 rounded-lg">
+    <div className="bg-navy-800 p-8 rounded-lg">
       <button
         onClick={onBack}
-        className="text-purple-400 hover:text-purple-300 mb-6 flex items-center gap-2"
+        className="text-accent-400 hover:text-accent-300 mb-6 flex items-center gap-2"
       >
         <ArrowLeft size={20} />
         Back to login
       </button>
 
       <div className="flex justify-center mb-6">
-        <Lock className="h-12 w-12 text-purple-500" />
+        <Lock className="h-12 w-12 text-accent-500" />
       </div>
 
       <h3 className="text-xl font-bold text-white mb-6 text-center">
@@ -121,7 +121,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ type, onBack }) => {
               required
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-navy-700 border border-navy-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent"
               placeholder={type === 'patient' ? 'Enter your UHID' : 'Enter your email'}
               maxLength={type === 'patient' ? 14 : undefined}
             />
@@ -130,7 +130,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ type, onBack }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-accent-600 hover:bg-accent-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
@@ -160,7 +160,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ type, onBack }) => {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-navy-700 border border-navy-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent"
               placeholder="Enter new password"
               minLength={6}
             />
@@ -175,7 +175,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ type, onBack }) => {
               required
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+              className="w-full px-3 py-2 bg-navy-700 border border-navy-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent-500 focus:border-transparent"
               placeholder="Confirm new password"
               minLength={6}
             />
@@ -184,7 +184,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ type, onBack }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-accent-600 hover:bg-accent-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>

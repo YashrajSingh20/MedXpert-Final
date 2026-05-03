@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AlertCircle, Stethoscope, User, Pill, Loader2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { loginUser } from '../utils/auth';
 import ForgotPassword from '../components/ForgotPassword';
+import AnimatedBackground from '../components/AnimatedBackground';
+import GlowCard from '../components/GlowCard';
+import PageTransition from '../components/PageTransition';
+import ScrollReveal from '../components/ScrollReveal';
 
 interface LocationState {
   message?: string;
@@ -24,7 +29,6 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
 
-  // Clear location state after reading it
   useEffect(() => {
     if (location.state) {
       navigate(location.pathname, { replace: true });
@@ -46,15 +50,9 @@ const Login: React.FC = () => {
     try {
       if (loginUser(identifier, password)) {
         switch (selectedRole) {
-          case 'doctor':
-            navigate('/doctor/dashboard');
-            break;
-          case 'patient':
-            navigate('/patient/dashboard');
-            break;
-          case 'medical':
-            navigate('/medical/dashboard');
-            break;
+          case 'doctor': navigate('/doctor/dashboard'); break;
+          case 'patient': navigate('/patient/dashboard'); break;
+          case 'medical': navigate('/medical/dashboard'); break;
         }
       } else {
         setError('Invalid login credentials');
@@ -73,7 +71,9 @@ const Login: React.FC = () => {
       Icon: Stethoscope,
       description: 'Generate digital prescriptions and manage patient records efficiently',
       signupLink: '/doctor/signup',
-      signupText: 'New doctor? Sign up here'
+      signupText: 'New doctor? Sign up here',
+      glowColor: 'rgba(99, 102, 241, 0.12)',
+      iconBg: 'from-indigo-500 to-accent-600',
     },
     {
       role: 'patient' as UserRole,
@@ -81,7 +81,9 @@ const Login: React.FC = () => {
       Icon: User,
       description: 'View your medical history and prescriptions',
       signupLink: '/patient/register',
-      signupText: 'New patient? Register here'
+      signupText: 'New patient? Register here',
+      glowColor: 'rgba(20, 184, 166, 0.12)',
+      iconBg: 'from-med-500 to-sky-500',
     },
     {
       role: 'medical' as UserRole,
@@ -89,7 +91,9 @@ const Login: React.FC = () => {
       Icon: Pill,
       description: 'Verify and process digital prescriptions seamlessly',
       signupLink: '/medical/signup',
-      signupText: 'New medical store? Sign up here'
+      signupText: 'New medical store? Sign up here',
+      glowColor: 'rgba(244, 114, 182, 0.1)',
+      iconBg: 'from-pink-500 to-rose-600',
     }
   ];
 
@@ -97,152 +101,193 @@ const Login: React.FC = () => {
 
   if (!selectedRole) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl w-full space-y-8">
-          <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-              Sign in to your account
-            </h2>
-          </div>
+      <PageTransition>
+        <AnimatedBackground variant="subtle">
+          <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl w-full space-y-8">
+              <ScrollReveal variant="blur-in">
+                <h2 className="text-center text-3xl md:text-4xl font-extrabold shimmer-text">
+                  Sign in to your account
+                </h2>
+                <p className="text-center text-gray-500 mt-3 font-medium">Choose your role to continue</p>
+              </ScrollReveal>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {roleCards.map(({ role, title, Icon, description }) => (
-              <button
-                key={role}
-                onClick={() => setSelectedRole(role)}
-                className="bg-gray-800 p-6 rounded-lg text-left hover:bg-gray-700 transition-colors border-2 border-transparent hover:border-purple-500 focus:outline-none focus:border-purple-500"
-              >
-                <Icon className="h-12 w-12 text-purple-500 mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-                <p className="text-gray-400">{description}</p>
-              </button>
-            ))}
+              <ScrollReveal variant="fade-up" className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6" stagger={0.12}>
+                {roleCards.map(({ role, title, Icon, description, iconBg, glowColor }) => (
+                  <GlowCard
+                    key={role}
+                    as="button"
+                    onClick={() => setSelectedRole(role)}
+                    className="glass-card p-6 text-left"
+                    glowColor={glowColor}
+                  >
+                    <div className={`bg-gradient-to-br ${iconBg} p-3 rounded-xl w-14 h-14 flex items-center justify-center mb-4 shadow-lg`}>
+                      <Icon className="h-7 w-7 text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white mb-1.5">{title}</h3>
+                    <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
+                  </GlowCard>
+                ))}
+              </ScrollReveal>
+            </div>
           </div>
-        </div>
-      </div>
+        </AnimatedBackground>
+      </PageTransition>
     );
   }
 
   if (showForgotPassword) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full">
-          <ForgotPassword
-            type={selectedRole}
-            onBack={() => setShowForgotPassword(false)}
-          />
-        </div>
-      </div>
+      <PageTransition>
+        <AnimatedBackground variant="subtle">
+          <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <motion.div 
+              className="max-w-md w-full"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ForgotPassword type={selectedRole} onBack={() => setShowForgotPassword(false)} />
+            </motion.div>
+          </div>
+        </AnimatedBackground>
+      </PageTransition>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full">
-        <button
-          onClick={() => setSelectedRole(null)}
-          className="text-purple-400 hover:text-purple-300 mb-6 flex items-center gap-2"
-        >
-          ← Back to role selection
-        </button>
-        
-        <div className="bg-gray-800 p-8 rounded-lg">
-          {selectedCard && (
-            <>
-              <selectedCard.Icon className="h-12 w-12 text-purple-500 mb-4" />
-              <h3 className="text-xl font-bold text-white mb-4">
-                {selectedCard.title}
-              </h3>
-            </>
-          )}
-          
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <div className="flex items-center p-4 text-red-500 bg-red-900/20 rounded-md">
-                <AlertCircle className="h-5 w-5 mr-2" />
-                <span>{error}</span>
-              </div>
-            )}
-            
-            {success && (
-              <div className="flex items-center p-4 text-green-500 bg-green-900/20 rounded-md">
-                <span>{success}</span>
-              </div>
-            )}
-
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="identifier" className="block text-sm font-medium text-gray-300 mb-1">
-                  {selectedRole === 'patient' ? 'UHID' : 'Email address'}
-                </label>
-                <input
-                  id="identifier"
-                  name="identifier"
-                  type={selectedRole === 'patient' ? 'text' : 'email'}
-                  autoComplete={selectedRole === 'patient' ? 'off' : 'email'}
-                  required
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder={selectedRole === 'patient' ? 'Enter your UHID' : 'Email address'}
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  maxLength={selectedRole === 'patient' ? 14 : undefined}
-                />
-              </div>
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end">
-              <button
-                type="button"
-                onClick={() => setShowForgotPassword(true)}
-                className="text-sm text-purple-400 hover:text-purple-300"
-              >
-                Forgot password?
-              </button>
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 disabled:opacity-50 disabled:cursor-not-allowed"
+    <PageTransition>
+      <AnimatedBackground variant="subtle">
+        <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+          <motion.div 
+            className="max-w-md w-full"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+          >
+            <motion.button
+              onClick={() => setSelectedRole(null)}
+              className="text-med-400/60 hover:text-med-400 mb-6 flex items-center gap-2 text-sm font-medium transition-colors"
+              whileHover={{ x: -4 }}
             >
-              {isLoading ? (
-                <>
-                  <Loader2 className="animate-spin h-5 w-5" />
-                  Signing in...
-                </>
-              ) : (
-                'Sign in'
+              ← Back to role selection
+            </motion.button>
+            
+            <div className="glass-card p-8">
+              {selectedCard && (
+                <div className="flex items-center gap-3 mb-6">
+                  <div className={`bg-gradient-to-br ${selectedCard.iconBg} p-2.5 rounded-xl`}>
+                    <selectedCard.Icon className="h-6 w-6 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">{selectedCard.title}</h3>
+                </div>
               )}
-            </button>
+              
+              <form className="space-y-5" onSubmit={handleSubmit}>
+                <AnimatePresence>
+                  {error && (
+                    <motion.div 
+                      className="flex items-center p-4 text-red-400 bg-red-500/10 border border-red-500/15 rounded-xl"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                    >
+                      <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0" />
+                      <span className="text-sm">{error}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                
+                <AnimatePresence>
+                  {success && (
+                    <motion.div 
+                      className="flex items-center p-4 text-emerald-400 bg-emerald-500/10 border border-emerald-500/15 rounded-xl"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                    >
+                      <span className="text-sm">{success}</span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-            {selectedCard && (
-              <Link
-                to={selectedCard.signupLink}
-                className="block text-center text-sm text-purple-400 hover:text-purple-300 mt-4"
-              >
-                {selectedCard.signupText}
-              </Link>
-            )}
-          </form>
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="identifier" className="block text-xs font-semibold uppercase tracking-[0.15em] text-gray-400 mb-2">
+                      {selectedRole === 'patient' ? 'UHID' : 'Email address'}
+                    </label>
+                    <input
+                      id="identifier"
+                      name="identifier"
+                      type={selectedRole === 'patient' ? 'text' : 'email'}
+                      autoComplete={selectedRole === 'patient' ? 'off' : 'email'}
+                      required
+                      className="auth-input"
+                      placeholder={selectedRole === 'patient' ? 'Enter your UHID' : 'Email address'}
+                      value={identifier}
+                      onChange={(e) => setIdentifier(e.target.value)}
+                      maxLength={selectedRole === 'patient' ? 14 : undefined}
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-[0.15em] text-gray-400 mb-2">
+                      Password
+                    </label>
+                    <input
+                      id="password"
+                      name="password"
+                      type="password"
+                      autoComplete="current-password"
+                      required
+                      className="auth-input"
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end">
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotPassword(true)}
+                    className="text-xs text-med-400/50 hover:text-med-400 transition-colors font-medium"
+                  >
+                    Forgot password?
+                  </button>
+                </div>
+
+                <motion.button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-accent-600 to-accent-700 hover:from-accent-500 hover:to-accent-600 shadow-[0_0_15px_rgba(139,92,246,0.15)] hover:shadow-[0_0_30px_rgba(139,92,246,0.3)] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="animate-spin h-5 w-5" />
+                      Signing in...
+                    </>
+                  ) : (
+                    'Sign in'
+                  )}
+                </motion.button>
+
+                {selectedCard && (
+                  <Link
+                    to={selectedCard.signupLink}
+                    className="block text-center text-sm text-med-400/50 hover:text-med-400 transition-colors mt-4 font-medium"
+                  >
+                    {selectedCard.signupText}
+                  </Link>
+                )}
+              </form>
+            </div>
+          </motion.div>
         </div>
-      </div>
-    </div>
+      </AnimatedBackground>
+    </PageTransition>
   );
 };
 

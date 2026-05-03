@@ -16,7 +16,7 @@ const PatientInfo: React.FC<PatientInfoProps> = ({ uhid, patientInfo }) => {
   if (!patientInfo) return null;
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg mb-6">
+    <div className="bg-navy-800 p-4 rounded-lg mb-6">
       <h3 className="text-lg font-medium text-gray-200 mb-2">Patient Information</h3>
       <div className="grid grid-cols-2 gap-4">
         <div>
