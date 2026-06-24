@@ -58,17 +58,28 @@ export const generateUHID = async (): Promise<string> => {
   const year = new Date().getFullYear().toString();
   let isUnique = false;
   let uhid = '';
+  let attempts = 0;
 
-  while (!isUnique) {
+  while (!isUnique && attempts < 10) {
+    attempts++;
     const random = Math.floor(Math.random() * 10000000000).toString().padStart(10, '0');
     uhid = year + random;
 
-    const { count } = await supabase
+    const { count, error } = await supabase
       .from('patients')
       .select('*', { count: 'exact', head: true })
       .eq('uhid', uhid);
 
+    if (error) {
+      console.error('Error generating UHID:', error);
+      throw new Error(`Database error: ${error.message}`);
+    }
+
     if (count === 0) isUnique = true;
+  }
+
+  if (!isUnique) {
+    throw new Error('Failed to generate a unique UHID after multiple attempts');
   }
 
   return uhid;
